@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h2>{{ header }}</h2>
+    <h2>{{ $t('your_interpretation') }}</h2>
     <p>
       {{ interpretation }}
     </p>
@@ -14,11 +14,6 @@ export default {
     interpretation: {
       type: String,
       default: 'Interpretation'
-    }
-  },
-  data: () => {
-    return {
-      header: 'Your interpretation:'
     }
   }
 }

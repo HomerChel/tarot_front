@@ -1,10 +1,10 @@
 <template>
   <LanguageSelector />
   <img alt="Tarot Pro logo" src="./assets/logo.jpg" class="logo">
-  <WelcomeText :key="$i18n.locale" />
-  <RequestForm @clicked="fetchInterpretation" :key="$i18n.locale" />
+  <WelcomeText />
+  <RequestForm @clicked="fetchInterpretation" :loading="loading" />
   <SpreadList v-if="showInterpretation" :cardsData="spreadData" />
-  <InterpretationText v-if="showInterpretation" :interpretation="interpretation"/>
+  <InterpretationText v-if="showInterpretation" :interpretation="interpretation" />
 </template>
 
 <script>
@@ -28,11 +28,14 @@ export default {
     return {
       showInterpretation: false,
       interpretation: '',
-      spreadData: null
+      spreadData: null,
+      loading: false
     }
   },
   methods: {
     async fetchInterpretation(question) {
+      this.loading = true;
+      this.showInterpretation = false;
       axios.get(process.env.VUE_APP_API_SERVER + '/spread3/' + this.$i18n.locale, {
         headers: {
           'X-API-KEY': process.env.VUE_APP_X_API_KEY
@@ -53,6 +56,9 @@ export default {
         })
         .catch(error => {
           console.error(error);
+        })
+        .finally(() => {
+          this.loading = false;
         });
     }
   }
