@@ -1,4 +1,5 @@
 <template>
+	<textarea v-model="question" name="question" rows="3" :placeholder="$t('textarea_placeholder')"></textarea>
   <div class="buttonWrapper">
     <button @click="onClick">{{ $t('button_text') }}</button>
   </div>
@@ -6,10 +7,10 @@
 
 <script>
 export default {
-  name: 'SendRequestButton',
+  name: 'RequestForm',
   methods: {
     onClick() {
-      this.$emit('clicked');
+      this.$emit('clicked', this.question);
     }
   }
 }
@@ -29,6 +30,7 @@ button {
 	padding:13px 32px;
 	text-decoration:none;
 	text-shadow:0px 1px 0px #392A16;
+	margin: 10px;
 }
 button:hover {
 	background:linear-gradient(to bottom, #B86F52 5%, #EECD7A 100%);
@@ -39,4 +41,8 @@ button:active {
 	top:1px;
 }
 
+textarea {
+	width: 80%;
+	max-width: 500px;
+}
 </style>
