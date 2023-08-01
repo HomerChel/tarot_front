@@ -23,7 +23,8 @@ const routes = [
     {
         path: '/account',
         name: 'account',
-        component: AccountPage
+        component: AccountPage,
+        meta: { requiresAuth: true },
     }
 ];
 
@@ -31,5 +32,13 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+router.beforeEach((to) => {
+    if (to.meta.requiresAuth && !localStorage.getItem('JWT_token')) {
+      return {
+        name: 'login',
+      }
+    }
+  })
 
 export default router;
