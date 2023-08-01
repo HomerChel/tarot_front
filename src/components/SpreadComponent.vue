@@ -31,8 +31,9 @@ export default {
       this.showInterpretation = false;
       axios.get(process.env.VUE_APP_API_SERVER + '/spreads/three-cards/' + this.$i18n.locale, {
         headers: {
-          'X-API-KEY': process.env.VUE_APP_X_API_KEY
-        },params: {
+          'Authorization': 'bearer ' + localStorage.getItem('JWT_token')
+        },
+        params: {
           question: question
         },
       })
