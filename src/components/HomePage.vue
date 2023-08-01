@@ -1,6 +1,6 @@
 <template>
   <WelcomeText />
-  <SpreadComponent />
+  <SpreadComponent v-if="isLoggedIn" />
 </template>
 
 <script>
@@ -13,6 +13,11 @@ export default {
   components: {
     WelcomeText,
     SpreadComponent
-},
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.state.isLoggedIn;
+    },
+  },
 }
 </script>

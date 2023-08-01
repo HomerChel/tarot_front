@@ -29,8 +29,9 @@ export default {
         password: this.password
       })
         .then(response => {
-          console.log(response.data);
           localStorage.setItem('JWT_token', response.data.token);
+          this.$store.dispatch('fetchLoggedIn');
+          this.$router.push({ name: 'home' });
         })
         .catch(error => {
           this.error = error.response.data.message ?? 'Smth went wrong. Please try again later.'
