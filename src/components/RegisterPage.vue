@@ -7,7 +7,7 @@
     <br>
     <input v-model="password" name="password" :class="{error: passwordError}" type="password" placeholder="password">
     <br>
-    <button @click="register">Register</button>
+    <button @click="register">{{ $t('register') }}</button>
   </div>
 </template>
 
@@ -34,8 +34,8 @@ export default {
       this.error = '';
       if (!this.validateFields()) {
         this.error =
-          (this.emailError ? 'Incorrect email. ' : '') +
-          (this.passwordError ? 'Password must be at least 6 symbols length.' : '');
+          (this.emailError ? this.$t('incorrect_email') : '') +
+          (this.passwordError ? this.$t('short_password') : '');
         return;
       }
       
@@ -50,7 +50,7 @@ export default {
           this.isFormSent = true;
         })
         .catch(error => {
-          this.error = error.response.data.message ?? 'Smth went wrong. Please try again later.'
+          this.error = error.response.data.message ?? this.$t('request_error');
           if (!error.response.data.message) console.error(error);
         })
         .finally(() => {

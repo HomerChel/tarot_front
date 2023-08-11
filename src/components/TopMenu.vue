@@ -1,10 +1,10 @@
 <template>
   <div class="menu">
-    <router-link to="/">Home</router-link>
-    <router-link v-if="!isLoggedIn" to="/login">Login</router-link>
-    <router-link v-if="!isLoggedIn" to="/register">Register</router-link>
-    <router-link v-if="isLoggedIn" to="/account">Account</router-link>
-    <a v-if="isLoggedIn" href="javascript:void(0)" @click="logout">Logout</a>
+    <router-link to="/">{{ $t('home') }}</router-link>
+    <router-link v-if="!isLoggedIn" to="/login">{{ $t('login') }}</router-link>
+    <router-link v-if="!isLoggedIn" to="/register">{{ $t('register') }}</router-link>
+    <router-link v-if="isLoggedIn" to="/account">{{ $t('account') }}</router-link>
+    <a v-if="isLoggedIn" href="javascript:void(0)" @click="logout">{{ $t('logout') }}</a>
   </div>
 </template>
 

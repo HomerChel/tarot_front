@@ -35,15 +35,15 @@ export default {
       })
         .then(response => {
           if (response.data.status === 'overdue_code') {
-            this.error = "Code is too old (more than 24 hours)"
+            this.error = this.$t('old_code');
           } else if (response.data.status === 'wrong_code') {
-            this.error = "Wrong code!"
+            this.error = this.$t('wrong_code');
           } else if (response.data.status === 'success') {
             this.$router.push({ name: 'home' });
           }
         })
         .catch(error => {
-          this.error = error.response.data.message ?? 'Smth went wrong. Please try again later.'
+          this.error = error.response.data.message ?? this.$t('request_error');
           if (!error.response.data.message) console.error(error);
         })
         .finally(() => {

@@ -6,7 +6,7 @@
     <br>
     <input v-model="password" name="password" :class="{error: passwordError}" type="password" placeholder="password">
     <br>
-    <button @click="login">Login</button>
+    <button @click="login">{{ $t('login') }}</button>
   </div>
 </template>
 
@@ -27,8 +27,8 @@ export default {
       this.error = '';
       if (!this.validateFields()) {
         this.error =
-          (this.emailError ? 'Incorrect email. ' : '') +
-          (this.passwordError ? 'Password is too short.' : '');
+          (this.emailError ? this.$t('incorrect_email') : '') +
+          (this.passwordError ? this.$t('short_password') : '');
         return;
       }
       
@@ -43,7 +43,7 @@ export default {
           this.$router.push({ name: 'home' });
         })
         .catch(error => {
-          this.error = error.response.data.message ?? 'Smth went wrong. Please try again later.'
+          this.error = error.response.data.message ?? this.$t('request_error');
           if (!error.response.data.message) console.error(error);
         })
         .finally(() => {
