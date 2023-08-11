@@ -2,9 +2,9 @@
   <div>
     <span>{{ error }}</span>
     <br>
-    <input v-model="email" type="email" placeholder="email" />
+    <input v-model="email" name="email" :class="{error: emailError}" type="email" placeholder="email" />
     <br>
-    <input v-model="password" type="password" placeholder="password">
+    <input v-model="password" name="password" :class="{error: passwordError}" type="password" placeholder="password">
     <br>
     <button @click="login">Login</button>
   </div>
@@ -12,8 +12,10 @@
 
 <script>
 import axios from 'axios';
+import validationMixin from '../mixins/validationMixin.js';
 
 export default {
+  mixins: [validationMixin],
   name: 'LoginPage',
   data() {
     return {
@@ -23,6 +25,13 @@ export default {
   methods: {
     async login() {
       this.error = '';
+      if (!this.validateFields()) {
+        this.error =
+          (this.emailError ? 'Incorrect email. ' : '') +
+          (this.passwordError ? 'Password is too short.' : '');
+        return;
+      }
+      
       this.loading = true;
       axios.post(process.env.VUE_APP_API_SERVER + '/auth/login', {
         email: this.email,
@@ -48,5 +57,8 @@ export default {
 <style scoped>
 span {
   color: red;
+}
+.error {
+  border-color: red;
 }
 </style>

@@ -3,7 +3,11 @@
 		:disabled="loading"></textarea>
 	<div class="buttonWrapper">
 		<button v-if="!loading" @click="onClick" :disabled="loading">{{ $t('button_text') }}</button>
-		<img v-if="loading" src="/loading.gif" alt="Loading..." class="loader"/>
+		<img v-if="loading" src="/loading.gif" alt="Loading..." class="loader" />
+		<p v-if="showRegistrationText" v-html="$t('login_for_spread', {
+			registration: `<a href='/register'>${$t('registration_spread')}</a>`,
+			login: `<a href='/login'>${$t('login_spread')}</a>`
+		})"></p>
 	</div>
 </template>
 
@@ -11,11 +15,29 @@
 export default {
 	name: 'RequestForm',
 	props: ['loading'],
+	computed: {
+		isLoggedIn() {
+			return this.$store.state.isLoggedIn;
+		},
+	},
+	data() {
+		return {
+			showRegistrationText: false,
+		}
+	},
 	methods: {
 		onClick() {
+			if (!this.isLoggedIn) {
+				this.showRegistrationText = true;
+				localStorage.setItem('unregistered_question', this.question ?? '');
+				return;
+			}
 			this.$emit('clicked', this.question);
 		}
-	}
+	},
+	beforeMount() {
+		this.question = localStorage.getItem('unregistered_question') ?? '';
+	},
 }
 </script>
 

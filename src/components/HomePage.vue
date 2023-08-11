@@ -1,6 +1,6 @@
 <template>
   <WelcomeText />
-  <SpreadComponent v-if="isLoggedIn" />
+  <SpreadComponent />
 </template>
 
 <script>

@@ -1,16 +1,71 @@
 <template>
-  <div>
-    <input name="email" type="email" placeholder="email" />
+  <MailVerificationForm :email="email" v-if="isFormSent" />
+  <div v-if="!isFormSent">
+    <span>{{ error }}</span>
     <br>
-    <input name="passwprd" type="password" placeholder="password">
+    <input v-model="email" name="email" :class="{error: emailError}" type="email" placeholder="email" />
     <br>
-    <button>Register</button>
+    <input v-model="password" name="password" :class="{error: passwordError}" type="password" placeholder="password">
+    <br>
+    <button @click="register">Register</button>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import MailVerificationForm from './MailVerificationForm.vue';
+import validationMixin from '../mixins/validationMixin.js';
 
 export default {
+  mixins: [validationMixin],
   name: 'RegisterPage',
+  components: {
+    MailVerificationForm
+  },
+  data() {
+    return {
+      error: '',
+      isFormSent: false,
+      email: ''
+    }
+  },
+  methods: {
+    async register() {
+      this.error = '';
+      if (!this.validateFields()) {
+        this.error =
+          (this.emailError ? 'Incorrect email. ' : '') +
+          (this.passwordError ? 'Password must be at least 6 symbols length.' : '');
+        return;
+      }
+      
+      this.loading = true;
+      axios.post(process.env.VUE_APP_API_SERVER + '/auth/register', {
+        email: this.email,
+        password: this.password
+      })
+        .then(response => {
+          localStorage.setItem('JWT_token', response.data.token);
+          this.$store.dispatch('fetchLoggedIn');
+          this.isFormSent = true;
+        })
+        .catch(error => {
+          this.error = error.response.data.message ?? 'Smth went wrong. Please try again later.'
+          if (!error.response.data.message) console.error(error);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    }
+  }
 }
 </script>
+
+<style scoped>
+span {
+  color: red;
+}
+.error {
+  border-color: red;
+}
+</style>
